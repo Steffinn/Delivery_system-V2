@@ -4773,6 +4773,22 @@ namespace MissionPlanner.GCSViews
             writeKML();
         }
 
+        public void deliveryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedrow = Commands.Rows.Add();
+
+            Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.LOITER_TIME.ToString();
+
+            Commands.Rows[selectedrow].Cells[Param1.Index].Value = "180";
+
+            ChangeColumnHeader(MAVLink.MAV_CMD.LOITER_TIME.ToString());
+
+            updateUndoBuffer(false);
+            setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, (int) float.Parse(TXT_DefaultAlt.Text));
+
+            writeKML();
+        }
+
         public void loitertimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string time = "5";

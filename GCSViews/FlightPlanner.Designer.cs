@@ -140,6 +140,7 @@ namespace MissionPlanner.GCSViews
             this.loiterForeverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loitertimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loitercirclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deliveryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jumpstartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jumpwPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -901,6 +902,7 @@ namespace MissionPlanner.GCSViews
             this.insertWpToolStripMenuItem,
             this.insertSplineWPToolStripMenuItem,
             this.loiterToolStripMenuItem,
+            this.deliveryToolStripMenuItem,
             this.jumpToolStripMenuItem,
             this.rTLToolStripMenuItem,
             this.landToolStripMenuItem,
@@ -978,7 +980,13 @@ namespace MissionPlanner.GCSViews
             this.loitercirclesToolStripMenuItem.Name = "loitercirclesToolStripMenuItem";
             resources.ApplyResources(this.loitercirclesToolStripMenuItem, "loitercirclesToolStripMenuItem");
             this.loitercirclesToolStripMenuItem.Click += new System.EventHandler(this.loitercirclesToolStripMenuItem_Click);
-            // 
+            //
+            // deliveryToolStripMenuItem
+            //
+            this.deliveryToolStripMenuItem.Name = "deliveryToolStripMenuItem";
+            this.deliveryToolStripMenuItem.Text = "Delivery (pause 3 min)";
+            this.deliveryToolStripMenuItem.Click += new System.EventHandler(this.deliveryToolStripMenuItem_Click);
+            //
             // jumpToolStripMenuItem
             // 
             this.jumpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1623,6 +1631,7 @@ namespace MissionPlanner.GCSViews
         public ToolStripMenuItem loiterToolStripMenuItem;
         public ToolStripMenuItem loiterForeverToolStripMenuItem;
         public ToolStripMenuItem loitertimeToolStripMenuItem;
+        public ToolStripMenuItem deliveryToolStripMenuItem;
         public ToolStripMenuItem loitercirclesToolStripMenuItem;
         public ToolStripMenuItem jumpToolStripMenuItem;
         public ToolStripMenuItem jumpstartToolStripMenuItem;
