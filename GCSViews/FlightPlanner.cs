@@ -693,7 +693,7 @@ namespace MissionPlanner.GCSViews
 
                     ushort cmd = getCmdID(Commands.Rows[a].Cells[Command.Index].Value.ToString());
 
-                    if (cmd < (ushort) MAVLink.MAV_CMD.LAST &&
+                    if ((cmd < (ushort) MAVLink.MAV_CMD.LAST || cmd == (ushort) MAVLink.MAV_CMD.WAYPOINT_USER_1) &&
                         double.Parse(Commands[Alt.Index, a].Value.ToString()) < double.Parse(TXT_altwarn.Text))
                     {
                         if (cmd != (ushort) MAVLink.MAV_CMD.TAKEOFF &&
@@ -1947,7 +1947,7 @@ namespace MissionPlanner.GCSViews
 
 
                     ushort cmd = getCmdID(Commands.Rows[a].Cells[Command.Index].Value.ToString());
-                    if (cmd < (ushort) MAVLink.MAV_CMD.LAST &&
+                    if ((cmd < (ushort) MAVLink.MAV_CMD.LAST || cmd == (ushort) MAVLink.MAV_CMD.WAYPOINT_USER_1) &&
                         double.Parse(Commands[Alt.Index, a].Value.ToString()) < double.Parse(TXT_altwarn.Text))
                     {
                         if (cmd != (ushort) MAVLink.MAV_CMD.TAKEOFF &&
@@ -4777,11 +4777,11 @@ namespace MissionPlanner.GCSViews
         {
             selectedrow = Commands.Rows.Add();
 
-            Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.LOITER_TIME.ToString();
+            Commands.Rows[selectedrow].Cells[Command.Index].Value = "DELIVERY";
 
             Commands.Rows[selectedrow].Cells[Param1.Index].Value = "180";
 
-            ChangeColumnHeader(MAVLink.MAV_CMD.LOITER_TIME.ToString());
+            ChangeColumnHeader("DELIVERY");
 
             updateUndoBuffer(false);
             setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, (int) float.Parse(TXT_DefaultAlt.Text));
@@ -5812,6 +5812,13 @@ namespace MissionPlanner.GCSViews
         //Get back MAvlink command ID based on the command name. Use this instead of Enum.Parse of MAV_CMD, because this inclues ID's of non Mavlink dictionary commands
         public ushort getCmdID(string cmdName)
         {
+            // DELIVERY is a friendly display name for WAYPOINT_USER_1 (31000) - see
+            // mavcmd.xml and AP_Mission.cpp on the firmware side for the matching command.
+            if (cmdName == "DELIVERY")
+            {
+                return (ushort)MAVLink.MAV_CMD.WAYPOINT_USER_1;
+            }
+
             if (Enum.IsDefined(typeof(MAVLink.MAV_CMD),cmdName))
             {
                 return (ushort) Enum.Parse(typeof(MAVLink.MAV_CMD), cmdName, false);
@@ -5827,6 +5834,12 @@ namespace MissionPlanner.GCSViews
         //It returns null if command name is not included in the list.
         public string getCmd(ushort cmdID)
         {
+            // DELIVERY is a friendly display name for WAYPOINT_USER_1 (31000)
+            if (cmdID == (ushort)MAVLink.MAV_CMD.WAYPOINT_USER_1)
+            {
+                return "DELIVERY";
+            }
+
             //IS it defined in the MAV_CMD enum ?
             if (Enum.IsDefined(typeof(MAVLink.MAV_CMD), cmdID))
             {
@@ -6518,7 +6531,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 var loc = commandlist[a];
 
                 // make sure we are using the correct frame for these commands
-                if (loc.id < (ushort) MAVLink.MAV_CMD.LAST || loc.id == (ushort) MAVLink.MAV_CMD.DO_SET_HOME)
+                if (loc.id < (ushort) MAVLink.MAV_CMD.LAST || loc.id == (ushort) MAVLink.MAV_CMD.DO_SET_HOME || loc.id == (ushort) MAVLink.MAV_CMD.WAYPOINT_USER_1)
                 {
                     var mode = currentaltmode;
 
